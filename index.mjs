@@ -12,6 +12,9 @@ app.set('view engine', 'ejs');
 app.use(cookieParser());
 // Bind Express middleware to parse request bodies for POST requests
 app.use(express.urlencoded({ extended: false }));
+
+// bind express middleware to parse json data
+app.use(express.json());
 // Bind method override middleware to parse PUT and DELETE requests sent as POST requests
 app.use(methodOverride('_method'));
 // Expose the files stored in the public folder
