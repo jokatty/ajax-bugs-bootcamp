@@ -1,3 +1,15 @@
+// // function creates bug list
+// async function displayBugList() {
+//   // query the database for bugs
+//   try {
+//     const bugs = await db.Bugs.findAll();
+//     console.log(bugs);
+//     const mainContainer = document.createElement('div');
+//     document.body.appendChild(mainContainer);
+//   } catch (err) {
+//     console.log(err.stack);
+//   }
+// }
 // call back function when bug report form is submitted.
 async function submitForm(req) {
   // console.log(req.body.name);
@@ -72,6 +84,9 @@ function btnClicked() {
   submitBtn.innerText = 'Submit';
   submitBtnDiv.appendChild(submitBtn);
   submitBtn.addEventListener('click', submitForm);
+
+  // to display features list
+  axios.get('/features');
 }
 
 // btn appears when page is loaded.
@@ -80,4 +95,5 @@ function pageLoaded() {
   btn.innerHTML = 'Create a bug';
   document.body.appendChild(btn);
   btn.addEventListener('click', btnClicked);
+  // displayBugList();
 }

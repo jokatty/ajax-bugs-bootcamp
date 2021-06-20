@@ -1,6 +1,7 @@
 export default function initIndexController(db) {
   const index = (req, res) => {
-    res.render('index');
+    const features = [];
+    res.render('index', { features });
   };
 
   // post request
