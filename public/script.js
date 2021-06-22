@@ -1,25 +1,56 @@
-// // function creates bug list
-// async function displayBugList() {
-//   // query the database for bugs
-//   try {
-//     const bugs = await db.Bugs.findAll();
-//     console.log(bugs);
-//     const mainContainer = document.createElement('div');
-//     document.body.appendChild(mainContainer);
-//   } catch (err) {
-//     console.log(err.stack);
-//   }
-// }
+// display feature buttons
+async function displayFeatures() {
+  const features = await axios.get('/features');
+  console.log(features.data);
+
+  for (let i = 0; i < features.data.length; i += 1) {
+    // const btn = document.createElement('button');
+    // document.body.appendChild(btn);
+    // btn.innerText = features.data[i].name;
+    // btn.setAttribute('id', features.data[i].id);
+
+    const lable = document.createElement('lable');
+    document.body.appendChild(lable);
+    lable.innerText = features.data[i].name;
+    lable.setAttribute('for', features.data[i].id);
+    lable.setAttribute('id', 'lable');
+
+    const option = document.createElement('input');
+    document.body.appendChild(option);
+    option.setAttribute('type', 'radio');
+    option.setAttribute('name', 'radio');
+    option.setAttribute('id', features.data[i].id);
+    option.setAttribute('value', features.data[i].id);
+  }
+}
+// function creates bug list
+async function displayBugList() {
+  const bugsList = await axios.get('/bugs');
+  const container = document.createElement('div');
+  container.setAttribute('class', 'container mt-5');
+  document.body.appendChild(container);
+  const h2 = document.createElement('h2');
+  container.appendChild(h2);
+  h2.innerText = 'List of bugs';
+  for (let i = 0; i < bugsList.data.length; i += 1) {
+    const bug = bugsList.data[i].problem;
+    const p = document.createElement('p');
+    container.appendChild(p);
+    p.innerText = `${i + 1}. ${bug}`;
+  }
+}
+
 // call back function when bug report form is submitted.
 async function submitForm(req) {
-  // console.log(req.body.name);
-  // console.log(req);
   const problem = document.getElementById('problemInput').value;
   console.log(problem);
   const errorText = document.getElementById('errorInput').value;
   console.log(errorText);
   const commit = document.getElementById('commitInput').value;
   console.log(commit);
+
+  const featureId = document.getElementById('lable').value;
+  console.log(featureId);
 
   const bugData = {
     problem,
@@ -32,12 +63,10 @@ async function submitForm(req) {
     console.log(err.stack);
   });
   document.getElementById('main-container').remove();
-  // const problemInput = document.getElementById('problemInput');
-  // problemInput.style.display = 'none';
 }
+
 // event listner callback function for btn
 function btnClicked() {
-  // problem input field
   const mainContainer = document.createElement('div');
   mainContainer.setAttribute('id', 'main-container');
   document.body.appendChild(mainContainer);
@@ -85,15 +114,16 @@ function btnClicked() {
   submitBtnDiv.appendChild(submitBtn);
   submitBtn.addEventListener('click', submitForm);
 
-  // to display features list
-  axios.get('/features');
+  // feature buttons
+  displayFeatures();
 }
 
 // btn appears when page is loaded.
 function pageLoaded() {
   const btn = document.createElement('button');
+  btn.setAttribute('class', 'btn btn-outline-danger m-5');
   btn.innerHTML = 'Create a bug';
   document.body.appendChild(btn);
   btn.addEventListener('click', btnClicked);
-  // displayBugList();
+  displayBugList();
 }
