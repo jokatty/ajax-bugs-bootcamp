@@ -1,9 +1,9 @@
 export default function initFeatureModel(sequelize, DataTypes) {
   return sequelize.define('feature', {
     id: {
+      primaryKey: true,
       allowNull: false,
       autoIncrement: true,
-      primaryKey: true,
       type: DataTypes.INTEGER,
     },
     name: {

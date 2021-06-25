@@ -17,5 +17,6 @@ export default function bindRoutes(app) {
   app.get('/', IndexController.index);
   app.post('/', IndexController.handlePost);
   app.get('/features', FeaturesController.index);
+  app.post('/features', FeaturesController.post);
   app.get('/bugs', BugController.bugs);
 }

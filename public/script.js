@@ -1,28 +1,48 @@
-// display feature buttons
-async function displayFeatures() {
-  const features = await axios.get('/features');
-  console.log(features.data);
-
-  for (let i = 0; i < features.data.length; i += 1) {
-    // const btn = document.createElement('button');
-    // document.body.appendChild(btn);
-    // btn.innerText = features.data[i].name;
-    // btn.setAttribute('id', features.data[i].id);
-
-    const lable = document.createElement('lable');
-    document.body.appendChild(lable);
-    lable.innerText = features.data[i].name;
-    lable.setAttribute('for', features.data[i].id);
-    lable.setAttribute('id', 'lable');
-
-    const option = document.createElement('input');
-    document.body.appendChild(option);
-    option.setAttribute('type', 'radio');
-    option.setAttribute('name', 'radio');
-    option.setAttribute('id', features.data[i].id);
-    option.setAttribute('value', features.data[i].id);
-  }
+/**
+ * callback when new feature form is submitted
+ */
+async function submittedNewFeature() {
+  const featureName = document.getElementById('featureName').value;
+  console.log(featureName);
+  const featuresData = {
+    featureName,
+  };
+  await axios.post('/features', featuresData).then((response) => {
+    console.log(response);
+  }).catch((err) => {
+    console.log(err.stack);
+  });
 }
+
+/**
+ * callback for create feature button click
+ */
+function renderFeatureForm() {
+  const featuresDiv = document.createElement('div');
+  document.body.appendChild(featuresDiv);
+  const name = document.createElement('input');
+  name.setAttribute('placeholder', 'enter feature name');
+  name.setAttribute('id', 'featureName');
+  featuresDiv.appendChild(name);
+  console.log('hey callback is running');
+
+  const submitBtn = document.createElement('button');
+  submitBtn.innerText = 'submit feature';
+  featuresDiv.appendChild(submitBtn);
+  submitBtn.addEventListener('click', submittedNewFeature);
+}
+
+/**
+ * function creates "features button" on page load
+ */
+function createFeatures() {
+  const createFeatureBtn = document.createElement('button');
+  createFeatureBtn.innerText = 'Create feature';
+  createFeatureBtn.setAttribute('class', 'btn btn-primary');
+  document.body.appendChild(createFeatureBtn);
+  createFeatureBtn.addEventListener('click', renderFeatureForm);
+}
+
 // function creates bug list
 async function displayBugList() {
   const bugsList = await axios.get('/bugs');
@@ -49,13 +69,20 @@ async function submitForm(req) {
   const commit = document.getElementById('commitInput').value;
   console.log(commit);
 
-  const featureId = document.getElementById('lable').value;
+  // const featureId = document.getElementById('1').value;
+  // console.log(featureId);
+  // const featureId = document.getElementsByName('radio');
+  // console.log(featureId);
+  const featureId = document.querySelector('input[name="radio"]:checked').value;
   console.log(featureId);
+
+  console.log(req);
 
   const bugData = {
     problem,
     errorText,
     commit,
+    featureId,
   };
   await axios.post('/', bugData).then((response) => {
     console.log(response);
@@ -115,7 +142,49 @@ function btnClicked() {
   submitBtn.addEventListener('click', submitForm);
 
   // feature buttons
-  displayFeatures();
+  const NavBar = document.createElement('input');
+  NavBar.setAttribute('type', 'radio');
+  NavBar.setAttribute('id', '1');
+  NavBar.setAttribute('name', 'radio');
+  NavBar.setAttribute('value', '1');
+  document.body.appendChild(NavBar);
+  const NavLabel = document.createElement('label');
+  NavLabel.setAttribute('for', '1');
+  NavLabel.innerText = 'NavBar';
+  document.body.appendChild(NavLabel);
+
+  const dashboard = document.createElement('input');
+  dashboard.setAttribute('type', 'radio');
+  dashboard.setAttribute('id', '2');
+  dashboard.setAttribute('name', 'radio');
+  dashboard.setAttribute('value', '2');
+  document.body.appendChild(dashboard);
+  const dashboardLabel = document.createElement('label');
+  dashboardLabel.setAttribute('for', '2');
+  dashboardLabel.innerText = 'Dashboard';
+  document.body.appendChild(dashboardLabel);
+
+  const forms = document.createElement('input');
+  forms.setAttribute('type', 'radio');
+  forms.setAttribute('id', '3');
+  forms.setAttribute('name', 'radio');
+  forms.setAttribute('value', '3');
+  document.body.appendChild(forms);
+  const formLabel = document.createElement('label');
+  formLabel.setAttribute('for', '3');
+  formLabel.innerText = 'forms';
+  document.body.appendChild(formLabel);
+
+  const userAuth = document.createElement('input');
+  userAuth.setAttribute('type', 'radio');
+  userAuth.setAttribute('id', '4');
+  userAuth.setAttribute('name', 'radio');
+  userAuth.setAttribute('value', '4');
+  document.body.appendChild(userAuth);
+  const userAuthLabel = document.createElement('label');
+  userAuthLabel.setAttribute('for', '4');
+  userAuthLabel.innerText = 'userAuth';
+  document.body.appendChild(userAuthLabel);
 }
 
 // btn appears when page is loaded.
@@ -125,5 +194,7 @@ function pageLoaded() {
   btn.innerHTML = 'Create a bug';
   document.body.appendChild(btn);
   btn.addEventListener('click', btnClicked);
+  // create feature form
+  createFeatures();
   displayBugList();
 }

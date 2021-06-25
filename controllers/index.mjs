@@ -6,12 +6,15 @@ export default function initIndexController(db) {
 
   // post request
   const handlePost = async (req, res) => {
-    const { problem, errorText, commit } = req.body;
+    const {
+      problem, errorText, commit, featureId,
+    } = req.body;
     try {
       await db.Bug.create({
         problem,
         errorText,
         commit,
+        featureId,
       });
     } catch (err) {
       console.log(err);
